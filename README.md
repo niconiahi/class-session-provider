@@ -4,11 +4,11 @@ This is a POC for basic private (protected) routes and public route. With some c
 
 This includes:
 
-A provider for handling the user session, in sync with localStorage: <SessionProvider />
-Custom `Route` components: <ProtectedRoute /> and <PublicRoute />
-Two custom hooks: useLogin() and useLogout()
-A form with validation featuring Formik and Yup: <Login />
-Some scafolding I like to use
-Some helpers
+A provider for handling the user session, in sync with localStorage: <SessionProvider /></br>
+Custom `Route` components: <ProtectedRoute /> and <PublicRoute /></br>
+Two custom hooks: useLogin() and useLogout()</br>
+A form with validation featuring Formik and Yup: <Login /></br>
+Some scafolding I like to use</br>
+Some helpers</br>
 
 Hope you enjoy it!
