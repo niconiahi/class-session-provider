@@ -1,17 +1,39 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
+import { Switch, BrowserRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+// styles
+import './index.css';
+
+// components
+import Home from 'components/Home';
+import Login from 'components/Login';
+
+// providers
+import SessionProvider from 'lib/providers/SessionProvider/provider';
+
+// lib
+import { ROUTES } from 'lib/routes';
+import { ProtectedRoute, PublicRoute } from 'lib/router';
+
+const App = () => (
+  <StrictMode>
+    <SessionProvider>
+      <BrowserRouter>
+        <Switch>
+          <PublicRoute path={ROUTES.login}>
+            <Login />
+          </PublicRoute>
+          <ProtectedRoute path={ROUTES.home}>
+            <Home />
+          </ProtectedRoute>
+          <ProtectedRoute path="*">
+            <Home />
+          </ProtectedRoute>
+        </Switch>
+      </BrowserRouter>
+    </SessionProvider>
+  </StrictMode>
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(<App />, document.getElementById('root'));
