@@ -11,4 +11,29 @@ A form with validation featuring Formik and Yup: `<Login />`</br>
 Some scafolding I like to use</br>
 Some helpers</br>
 
+Application tree:
+
+```
+.
+├── components
+│   ├── Home.tsx
+│   └── Login.tsx
+├── lib
+│   ├── hooks
+│   │   ├── useLogin.ts
+│   │   └── useLogout.ts
+│   ├── providers
+│   │   └── SessionProvider
+│   │       ├── context.ts
+│   │       └── provider.tsx
+│   ├── constants.tsx
+│   ├── helpers.ts
+│   ├── router.tsx
+│   ├── routes.ts
+│   └── types.ts
+├── index.css
+├── index.tsx
+└── react-app-env.d.ts
+```
+
 Hope you enjoy it!

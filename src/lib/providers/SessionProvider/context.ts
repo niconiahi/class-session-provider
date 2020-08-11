@@ -10,7 +10,6 @@ type SessionContextValues = {
     user: User;
   };
   actions: {
-    setIsAuthenticated: (value: boolean) => void;
     setUser: (user: User) => void;
   };
 };
@@ -21,7 +20,6 @@ export const SessionContext = createContext<SessionContextValues>({
     user: EMPTY_USER,
   },
   actions: {
-    setIsAuthenticated: () => false,
     setUser: () => {},
   },
 });

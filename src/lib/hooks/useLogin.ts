@@ -11,7 +11,7 @@ type LoginValues = {
 
 export const useLogin = () => {
   const { actions } = useContext(SessionContext);
-  const { setUser, setIsAuthenticated } = actions;
+  const { setUser } = actions;
 
   const login = (values: LoginValues) => {
     return fetch('https://run.mocky.io/v3/2329e8fc-e223-4552-9931-65a2b7c9756c', {
@@ -25,7 +25,6 @@ export const useLogin = () => {
       .then((user: User) => {
         localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
-        setIsAuthenticated(false);
       })
       .catch((error: Error) => console.error(error.message));
   };

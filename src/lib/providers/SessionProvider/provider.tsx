@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useMemo } from 'react';
 
 // context
 import { SessionContext } from 'lib/providers/SessionProvider/context';
@@ -11,11 +11,7 @@ const SessionProvider: FC = ({ children }) => {
   const storedUser: User = safelyGetObject('user');
 
   const [user, setUser] = useState<User>(storedUser);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (user?.token) setIsAuthenticated(true);
-  }, [user]);
+  const isAuthenticated = useMemo(() => Boolean(user?.token), [user]);
 
   const state = {
     isAuthenticated,
@@ -23,7 +19,6 @@ const SessionProvider: FC = ({ children }) => {
   };
 
   const actions = {
-    setIsAuthenticated,
     setUser,
   };
 
