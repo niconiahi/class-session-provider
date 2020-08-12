@@ -1,6 +1,6 @@
 This is a POC for basic private (protected) routes and public route. With custom hooks to control login and logout events
 
-####[Link to demo](https://class-session-provider.vercel.app)
+####[Link to demo](https://class-session-provider.niconiahi.vercel.app)
 
 #### This includes:
 
