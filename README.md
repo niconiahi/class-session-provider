@@ -1,8 +1,8 @@
-This is a POC for basic private (protected) routes and public route. With some custom hooks spicy
+This is a POC for basic private (protected) routes and public route. With custom hooks to control login and logout events
 
-[Link to demo](https://class-session-provider.vercel.app)
+####[Link to demo](https://class-session-provider.vercel.app)
 
-This includes:
+#### This includes:
 
 A provider for handling the user session, in sync with localStorage: `<SessionProvider />`</br>
 Custom `Route` components: `<ProtectedRoute />` and `<PublicRoute />`</br>
@@ -11,7 +11,18 @@ A form with validation featuring Formik and Yup: `<Login />`</br>
 Some scafolding I like to use</br>
 Some helpers</br>
 
-Application tree:
+#### Libraries used:
+
+- Formik
+- React
+- React Router Dom
+- Yup
+
+#### Language:
+
+- Typescript
+
+#### Application tree:
 
 ```
 .
