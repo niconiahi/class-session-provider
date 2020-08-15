@@ -12,6 +12,8 @@ type User = {
 };
 
 // helpers
+const safelyGetObjectFromLocalStorage = (key: string) =>
+  JSON.parse(localStorage.getItem(key) || "{}");
 
 // constants
 const EMPTY_USER = {
@@ -186,7 +188,8 @@ const SessionContext = createContext<SessionContextValues>({
 });
 
 const SessionProvider: FC = ({ children }) => {
-  const [user, setUser] = useState<User>(EMPTY_USER);
+  const storedUser = safelyGetObjectFromLocalStorage("user");
+  const [user, setUser] = useState<User>(storedUser);
 
   const isAuthenticated = useMemo(() => Boolean(user?.token), [user]);
 
