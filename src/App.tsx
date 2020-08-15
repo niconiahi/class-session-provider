@@ -40,6 +40,13 @@ import React from "react";
 // 4. Un componente de login (con un simple Formik y validaciones por Yup) el cual
 //    necesitaremos para disparar la Prueba de Concepto
 
+// Steps:
+// 1. Crear Login y Home. Routing (creacion componentes custom <Router />) y wrappear Home y Login
+// 2. Session provider (y context tambien)
+// 3. Custom hooks de Login y Logout
+// 4. Terminar y conectar los componentes Home y Login
+// 5. Persistir la data de session con local storage
+
 const App = () => <h1>App</h1>;
 
 export default App;
