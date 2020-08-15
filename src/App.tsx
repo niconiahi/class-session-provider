@@ -1,5 +1,7 @@
-import React, { FC, useState, createContext, useContext } from "react";
-import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import React, { FC, useState, createContext, useContext, useMemo } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { BrowserRouter, Route, Redirect, useHistory } from "react-router-dom";
 
 // types
 type User = {
@@ -34,18 +36,26 @@ const useLogin = () => {
   const { actions } = useContext(SessionContext);
   const { setUser } = actions;
 
+  const { push } = useHistory();
+
   const login = (values: LoginValues) => {
-    return fetch("mocky", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    })
+    return fetch(
+      "https://run.mocky.io/v3/2329e8fc-e223-4552-9931-65a2b7c9756c",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    )
       .then((res) => res.json())
       .then((user: User) => {
         localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
+      })
+      .then(() => {
+        push(ROUTES.home);
       })
       .catch((error: Error) => console.error(error.message));
   };
@@ -66,8 +76,62 @@ const useLogout = () => {
 };
 
 // components
-const Home = () => <h1>Home</h1>;
-const Login = () => <h1>Login</h1>;
+const Home = () => {
+  const { logout } = useLogout();
+
+  const handleLogoutClick = () => logout();
+
+  return (
+    <div style={{ backgroundColor: "red" }}>
+      <h1>Home</h1>
+      <button onClick={handleLogoutClick}>LOGOUT</button>
+    </div>
+  );
+};
+
+const Login = () => {
+  const { login } = useLogin();
+
+  const initialValues = {
+    username: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required(),
+    password: Yup.string().required(),
+  });
+
+  const onSubmit = (values: LoginValues) => login(values);
+
+  const { handleChange, handleSubmit, values } = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  });
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="username">User</label>
+      <input
+        id="username"
+        placeholder="Type your username"
+        value={values.username}
+        onChange={handleChange}
+      />
+
+      <label htmlFor="password">Password</label>
+      <input
+        id="password"
+        placeholder="Type your password"
+        value={values.password}
+        onChange={handleChange}
+      />
+
+      <button type="submit">LOGIN</button>
+    </form>
+  );
+};
 
 // custom router
 type RouteProps = {
@@ -124,7 +188,7 @@ const SessionContext = createContext<SessionContextValues>({
 const SessionProvider: FC = ({ children }) => {
   const [user, setUser] = useState<User>(EMPTY_USER);
 
-  const isAuthenticated = false;
+  const isAuthenticated = useMemo(() => Boolean(user?.token), [user]);
 
   const state = {
     isAuthenticated,
