@@ -21,6 +21,11 @@ const App = () => (
     <SessionProvider>
       <BrowserRouter>
         <Switch>
+          {/* 
+          1. A public route (PublicRoute) to the Login, using path from a routes constant 
+          2. A private route (ProtectedRoute) to Home, using path from a routes constant
+          3. Any other (if you are logged in), you go home
+          */}
           <PublicRoute path={ROUTES.login}>
             <Login />
           </PublicRoute>
