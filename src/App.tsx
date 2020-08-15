@@ -25,6 +25,45 @@ const ROUTES = {
 };
 
 // hooks
+type LoginValues = {
+  username: string;
+  password: string;
+};
+
+const useLogin = () => {
+  const { actions } = useContext(SessionContext);
+  const { setUser } = actions;
+
+  const login = (values: LoginValues) => {
+    return fetch("mocky", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    })
+      .then((res) => res.json())
+      .then((user: User) => {
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+      })
+      .catch((error: Error) => console.error(error.message));
+  };
+
+  return { login };
+};
+
+const useLogout = () => {
+  const { actions } = useContext(SessionContext);
+  const { setUser } = actions;
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(EMPTY_USER);
+  };
+
+  return { logout };
+};
 
 // components
 const Home = () => <h1>Home</h1>;
