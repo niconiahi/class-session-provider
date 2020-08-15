@@ -1,16 +1,52 @@
-import React from "react";
+import React, { FC } from "react";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
 // types
 
 // helpers
 
 // constants
+const ROUTES = {
+  home: "/home",
+  login: "/login",
+};
 
 // hooks
 
 // components
+const Home = () => <h1>Home</h1>;
+const Login = () => <h1>Login</h1>;
 
 // custom router
+type RouteProps = {
+  path: string;
+};
+
+const PublicRoute: FC<RouteProps> = ({ children, path }) => {
+  // Need to get if the user is logged in or not from the Session Provider
+  const isAuthenticated = false;
+
+  if (isAuthenticated) return <Redirect to={ROUTES.home} />;
+
+  return (
+    <Route exact path={path}>
+      {children}
+    </Route>
+  );
+};
+
+const ProtectedRoute: FC<RouteProps> = ({ children, path }) => {
+  // Need to get if the user is logged in or not from the Session Provider
+  const isAuthenticated = false;
+
+  if (!isAuthenticated) return <Redirect to={ROUTES.login} />;
+
+  return (
+    <Route exact path={path}>
+      {children}
+    </Route>
+  );
+};
 
 // providers
 
@@ -27,6 +63,7 @@ import React from "react";
 //    to do, if let the user pass, or not
 // 2. Un routing con un componente <Route /> custom que sepa internamente
 //    si dejar pasar al usuario a la url requerida, o no
+//    :+1:
 
 // 3. Two custom hooks to handle login in and logging out from the application,
 //    with internal logic to correctly manipulate user data. Less login within
@@ -40,6 +77,18 @@ import React from "react";
 // 4. Un componente de login (con un simple Formik y validaciones por Yup) el cual
 //    necesitaremos para disparar la Prueba de Concepto
 
-const App = () => <h1>App</h1>;
+const App = () => (
+  <BrowserRouter>
+    <PublicRoute path={ROUTES.login}>
+      <Login />
+    </PublicRoute>
+    <ProtectedRoute path={ROUTES.home}>
+      <Home />
+    </ProtectedRoute>
+    <ProtectedRoute path="*">
+      <Home />
+    </ProtectedRoute>
+  </BrowserRouter>
+);
 
 export default App;
