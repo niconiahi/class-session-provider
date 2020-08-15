@@ -1,11 +1,24 @@
-import React, { FC } from "react";
+import React, { FC, useState, createContext, useContext } from "react";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
 // types
+type User = {
+  name: string;
+  lastname: string;
+  id: number;
+  token: string;
+};
 
 // helpers
 
 // constants
+const EMPTY_USER = {
+  name: "",
+  lastname: "",
+  id: 0,
+  token: "",
+};
+
 const ROUTES = {
   home: "/home",
   login: "/login",
@@ -23,8 +36,8 @@ type RouteProps = {
 };
 
 const PublicRoute: FC<RouteProps> = ({ children, path }) => {
-  // Need to get if the user is logged in or not from the Session Provider
-  const isAuthenticated = false;
+  const { state } = useContext(SessionContext);
+  const { isAuthenticated } = state;
 
   if (isAuthenticated) return <Redirect to={ROUTES.home} />;
 
@@ -36,8 +49,8 @@ const PublicRoute: FC<RouteProps> = ({ children, path }) => {
 };
 
 const ProtectedRoute: FC<RouteProps> = ({ children, path }) => {
-  // Need to get if the user is logged in or not from the Session Provider
-  const isAuthenticated = false;
+  const { state } = useContext(SessionContext);
+  const { isAuthenticated } = state;
 
   if (!isAuthenticated) return <Redirect to={ROUTES.login} />;
 
@@ -49,6 +62,46 @@ const ProtectedRoute: FC<RouteProps> = ({ children, path }) => {
 };
 
 // providers
+type SessionContextValues = {
+  state: {
+    isAuthenticated: boolean;
+    user: User;
+  };
+  actions: {
+    setUser: (user: User) => void;
+  };
+};
+
+const SessionContext = createContext<SessionContextValues>({
+  state: {
+    isAuthenticated: false,
+    user: EMPTY_USER,
+  },
+  actions: {
+    setUser: () => {},
+  },
+});
+
+const SessionProvider: FC = ({ children }) => {
+  const [user, setUser] = useState<User>(EMPTY_USER);
+
+  const isAuthenticated = false;
+
+  const state = {
+    isAuthenticated,
+    user,
+  };
+
+  const actions = {
+    setUser,
+  };
+
+  return (
+    <SessionContext.Provider value={{ state, actions }}>
+      {children}
+    </SessionContext.Provider>
+  );
+};
 
 // 1. Provider (context) that will provide all the app with the knowledge
 //    if the user is authenticated, or not
@@ -79,15 +132,17 @@ const ProtectedRoute: FC<RouteProps> = ({ children, path }) => {
 
 const App = () => (
   <BrowserRouter>
-    <PublicRoute path={ROUTES.login}>
-      <Login />
-    </PublicRoute>
-    <ProtectedRoute path={ROUTES.home}>
-      <Home />
-    </ProtectedRoute>
-    <ProtectedRoute path="*">
-      <Home />
-    </ProtectedRoute>
+    <SessionProvider>
+      <PublicRoute path={ROUTES.login}>
+        <Login />
+      </PublicRoute>
+      <ProtectedRoute path={ROUTES.home}>
+        <Home />
+      </ProtectedRoute>
+      <ProtectedRoute path="*">
+        <Home />
+      </ProtectedRoute>
+    </SessionProvider>
   </BrowserRouter>
 );
 
